@@ -86,17 +86,19 @@ const AdminReceiptForm = () => {
   }
 
   return (
-    <div className="bg-white border rounded-2xl p-6 space-y-6">
+    <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 space-y-6 shadow-sm">
       <div className="space-y-1">
-        <label className="text-xs text-slate-500">Склад</label>
+        <label className="text-sm font-medium text-gray-700">Склад</label>
         <select
           value={warehouseId}
           onChange={(e) => setWarehouseId(e.target.value)}
-          className="w-full rounded-lg border px-3 py-2 text-sm"
+          className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
         >
-          <option value="">Выберите склад</option>
+          <option value="" className="text-gray-500">
+            Выберите склад
+          </option>
           {warehouses.map((w) => (
-            <option key={w.id} value={w.id}>
+            <option key={w.id} value={w.id} className="text-gray-900">
               {w.name}
             </option>
           ))}
@@ -107,10 +109,10 @@ const AdminReceiptForm = () => {
         const suggestions = getSuggestions(item)
 
         return (
-          <div key={i} className="grid grid-cols-12 gap-3 border p-4 rounded-xl">
+          <div key={i} className="grid grid-cols-12 gap-4 border border-gray-200 bg-white p-5 rounded-xl shadow-sm">
             {/* Товар */}
             <div className="col-span-12 lg:col-span-3 relative space-y-1">
-              <label className="text-xs text-slate-500">Товар</label>
+              <label className="text-sm font-medium text-gray-700">Товар</label>
               <input
                 value={item.product_query}
                 onFocus={() => setFocusedIndex(i)}
@@ -119,11 +121,11 @@ const AdminReceiptForm = () => {
                   updateItem(i, 'product_query', e.target.value)
                   updateItem(i, 'product_id', null)
                 }}
-                placeholder="Товар"
-                className="w-full border rounded-lg px-3 py-2 text-sm"
+                placeholder="Введите название товара"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
               />
               {focusedIndex === i && suggestions.length > 0 && (
-                <div className="absolute z-10 w-full bg-white border rounded-lg">
+                <div className="absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-1 max-h-60 overflow-y-auto">
                   {suggestions.map((p) => (
                     <button
                       key={p.id}
@@ -133,7 +135,7 @@ const AdminReceiptForm = () => {
                         updateItem(i, 'product_id', p.id)
                         setFocusedIndex(null)
                       }}
-                      className="w-full text-left px-3 py-2 hover:bg-slate-100"
+                      className="w-full text-left px-4 py-3 text-gray-800 hover:bg-blue-50 border-b border-gray-100 last:border-b-0 transition-colors"
                     >
                       {p.name}
                     </button>
@@ -149,7 +151,7 @@ const AdminReceiptForm = () => {
               { key: 'volume_cbm', label: 'Объём, м³' },
             ].map(({ key, label }) => (
               <div key={key} className="col-span-6 lg:col-span-2 space-y-1">
-                <label className="text-xs text-slate-500">{label}</label>
+                <label className="text-sm font-medium text-gray-700">{label}</label>
                 <input
                   placeholder={label}
                   value={item[key as keyof TReceiptItem] ?? undefined}
@@ -158,15 +160,15 @@ const AdminReceiptForm = () => {
                     if (!/^\d*(\.\d*)?$/.test(v)) return
                     updateItem(i, key as keyof TReceiptItem, v)
                   }}
-                  className="w-full border rounded-lg px-3 py-2 text-sm"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 />
               </div>
             ))}
 
             <div className="col-span-6 lg:col-span-2 space-y-1">
-              <label className="text-xs text-slate-500">Цена закупки</label>
+              <label className="text-sm font-medium text-gray-700">Цена закупки</label>
               <input
-                placeholder="Цена за единицу"
+                placeholder="0.00"
                 value={item.purchase_cost}
                 onChange={(e) => {
                   const v = e.target.value
@@ -177,14 +179,14 @@ const AdminReceiptForm = () => {
                   updateItem(i, 'selling_price', sell)
                   updateItem(i, 'amount', calcAmount(sell, item.pieces_qty))
                 }}
-                className="w-full border rounded-lg px-3 py-2 text-sm"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
               />
             </div>
 
             <div className="col-span-6 lg:col-span-2 space-y-1">
-              <label className="text-xs text-slate-500">Наценка, %</label>
+              <label className="text-sm font-medium text-gray-700">Наценка, %</label>
               <input
-                placeholder="% наценки"
+                placeholder="0"
                 value={item.markup_percent}
                 onChange={(e) => {
                   const v = e.target.value
@@ -194,50 +196,60 @@ const AdminReceiptForm = () => {
                   const sell = calcSellingPrice(item.purchase_cost, v)
                   updateItem(i, 'selling_price', sell)
                 }}
-                className="w-full border rounded-lg px-3 py-2 text-sm"
+                className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
               />
             </div>
 
             <div className="col-span-6 lg:col-span-2 space-y-1">
-              <label className="text-xs text-slate-500">Цена продажи</label>
+              <label className="text-sm font-medium text-gray-700">Цена продажи</label>
               <input
-                placeholder="Цена продажи за единицу"
+                placeholder="0.00"
                 value={item.selling_price}
                 onChange={(e) => {
                   const v = e.target.value
                   if (!/^\d*(\.\d*)?$/.test(v)) return
                   updateItem(i, 'selling_price', v)
                 }}
-                className="w-full bg-slate-100 border rounded-lg px-3 py-2 text-sm"
+                className="w-full border border-gray-300 bg-gray-100 rounded-lg px-3 py-2.5 text-gray-900 placeholder-gray-500"
               />
             </div>
 
             <div className="col-span-6 lg:col-span-2 space-y-1">
-              <label className="text-xs text-slate-500">Сумма</label>
+              <label className="text-sm font-medium text-gray-700">Сумма</label>
               <input
-                placeholder="Общая сумма по позиции"
+                placeholder="0.00"
                 value={item.amount}
-                className="w-full bg-slate-100 border rounded-lg px-3 py-2 text-sm"
+                className="w-full border border-gray-300 bg-gray-100 rounded-lg px-3 py-2.5 text-gray-900 placeholder-gray-500"
               />
             </div>
 
             {items.length > 1 && (
-              <button onClick={() => removeItem(i)}>
-                <Trash2 size={18} />
+              <button
+                onClick={() => removeItem(i)}
+                className="flex items-center justify-center h-10 w-10 rounded-lg hover:bg-red-50 text-red-600 hover:text-red-700 transition-colors self-end"
+              >
+                <Trash2 size={20} />
               </button>
             )}
           </div>
         )
       })}
 
-      <button onClick={addItem} className="flex items-center gap-2 text-blue-600">
-        <Plus size={18} /> Добавить
+      <button
+        onClick={addItem}
+        className="flex items-center gap-2 text-blue-600 hover:text-blue-700 font-medium px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors"
+      >
+        <Plus size={18} /> Добавить товар
       </button>
 
       <button
         disabled={isLoading || isInvalid}
         onClick={onSubmit}
-        className="bg-blue-600 text-white px-6 py-3 rounded-xl"
+        className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium transition-all ${
+          isLoading || isInvalid
+            ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+            : 'bg-blue-600 hover:bg-blue-700 text-white shadow-md hover:shadow-lg'
+        }`}
       >
         <PackagePlus size={18} /> Оформить приход
       </button>

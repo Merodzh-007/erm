@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { usePostMoveStockMutation } from '@/features/remain/api/stock.api'
-import type { TPutWarehouseStock } from '@/features/remain/model/stock.types'
+// import type { TPutWarehouseStock } from '@/features/remain/model/stock.types'
 import { useState } from 'react'
 import { X } from 'lucide-react'
 import { Field } from './ui/Field'
 import { useGetWarehousesQuery } from '@/features/warehouses/api/warehouses.api'
 
 type Props = {
-  stock: TPutWarehouseStock | null
+  stock: any | null
   onClose: () => void
 }
 

@@ -23,16 +23,14 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "ignoreDeprecations": "6.0",
-    "baseUrl": "src",
-      "paths": {
-        "@/*": ["*"],
+    "paths": {
+        "@/*": ["./src/*"],
   
-        "app/*": ["app/*"],
-        "features/*": ["features/*"],
-         "widgets/*": ["widgets/*"],
-        "pages/*": ["pages/*"],
-        "shared/*": ["shared/*"]
+        "app/*": ["./src/app/*"],
+        "features/*": ["./src/features/*"],
+         "widgets/*": ["./src/widgets/*"],
+        "pages/*": ["./src/pages/*"],
+        "shared/*": ["./src/shared/*"]
       
     }
   },

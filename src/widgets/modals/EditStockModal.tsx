@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { usePutWarehouseStockMutation } from '@/features/remain/api/stock.api'
-import type { TPutWarehouseStock } from '@/features/remain/model/stock.types'
 import { useState } from 'react'
 import { X } from 'lucide-react'
 import { Field } from './ui/Field'
 
-const EditStockModal = ({ stock, onClose }: { stock: TPutWarehouseStock | null; onClose: () => void }) => {
+const EditStockModal = ({ stock, onClose }: { stock: any | null; onClose: () => void }) => {
   const [updateStock, { isLoading }] = usePutWarehouseStockMutation()
 
   const [form, setForm] = useState({

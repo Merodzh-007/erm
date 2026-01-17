@@ -9,7 +9,10 @@ export type TSaleItemForm = {
   purchase_cost: string
   selling_price: string
 }
-export type TPostProductCredentials = Omit<TProductDto, 'id' | 'created_at' | 'last_unit_price' | 'total_stock'>
+export type TPostProductCredentials = Omit<
+  TProductDto,
+  'id' | 'created_at' | 'last_unit_price' | 'total_stock' | 'purchase_cost' | 'selling_price'
+>
 export type TPostProductResponseSuccess = {
   id: number
   name: string
