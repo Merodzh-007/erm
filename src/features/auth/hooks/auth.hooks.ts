@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useGetMeQuery } from '../api/auth.api'
 import Cookie from 'js-cookie'
 
