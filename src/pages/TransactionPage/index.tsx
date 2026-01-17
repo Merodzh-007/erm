@@ -1,23 +1,27 @@
 import { useMemo, useState } from 'react'
 import { Plus, Search, Eye, RotateCcw, Receipt } from 'lucide-react'
+import { useNavigate } from 'react-router'
+
 import { Loading } from '@/shared/ui/Loading'
 import { formatDateTime } from '@/shared/formatDateTime'
 import { useAuth } from '@/features/auth/hooks/auth.hooks'
 import { useGetSalesQuery } from '@/features/sales/api/sales.api'
 import { useGetReturnsQuery } from '@/features/returns/api/returns.api'
 import { CreateSaleModal } from '@/widgets/modals/CreateSaleModal'
-import { CreateReturnModal } from '@/widgets/modals/CreateReturnModal'
-import TransactionViewModal from '@/widgets/modals/TransactionViewModal'
+import ReturnsViewModal from '@/widgets/modals/ReturnsViewModal'
+import { paths } from '@/app/routers/constants'
 
 type Tab = 'sales' | 'returns'
 
 const TransactionPage = () => {
   const { isAdmin } = useAuth()
+  const navigate = useNavigate()
+
   const [createOpen, setCreateOpen] = useState(false)
   const [tab, setTab] = useState<Tab>('sales')
   const [search, setSearch] = useState('')
   const [viewId, setViewId] = useState<number | null>(null)
-  const [viewType, setViewType] = useState<Tab>('sales')
+
   const { data: sales = [], isLoading: isSalesLoading } = useGetSalesQuery()
   const { data: returns = [], isLoading: isReturnsLoading } = useGetReturnsQuery()
 
@@ -32,6 +36,14 @@ const TransactionPage = () => {
         i.created_by_name?.toLowerCase().includes(search.toLowerCase())
     )
   }, [sales, returns, search, tab])
+
+  const handleRowClick = (id: number) => {
+    if (tab === 'sales') {
+      navigate(paths.sales(id.toString()))
+    } else {
+      setViewId(id)
+    }
+  }
 
   if (isLoading) {
     return <Loading text={tab === 'sales' ? 'продаж' : 'возвратов'} />
@@ -59,38 +71,78 @@ const TransactionPage = () => {
               "
             />
           </div>
-
-          {isAdmin && (
-            <button
-              onClick={() => setCreateOpen(true)}
-              className="
-                inline-flex items-center justify-center gap-2
-                px-4 py-2.5 rounded-lg
-                bg-blue-600 text-white text-sm font-medium
-                hover:bg-blue-700 transition
-              "
-            >
-              <Plus size={16} />
-              {tab === 'sales' ? 'Продажа' : 'Возврат'}
-            </button>
-          )}
         </div>
       </div>
-      <div className="flex gap-2">
+
+      <div className="flex gap-3">
         <TabButton active={tab === 'sales'} onClick={() => setTab('sales')}>
           Продажи
         </TabButton>
         <TabButton active={tab === 'returns'} onClick={() => setTab('returns')}>
           Возвраты
         </TabButton>
+        {isAdmin && tab === 'sales' && (
+          <button
+            onClick={() => setCreateOpen(true)}
+            className="
+                inline-flex items-center justify-center gap-2
+                px-4 py-2.5 rounded-lg
+                bg-blue-600 text-white text-sm font-medium
+                hover:bg-blue-700 transition
+              "
+          >
+            <Plus size={16} />
+          </button>
+        )}
       </div>
+
       {!filtered.length && (
         <div className="bg-white border border-slate-200 rounded-xl p-8 text-center text-slate-500">
           {tab === 'sales' ? 'Продаж пока нет' : 'Возвратов пока нет'}
         </div>
       )}
+
       {!!filtered.length && (
-        <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+        <div className="space-y-3 sm:hidden">
+          {filtered.map((i) => (
+            <div
+              key={i.id}
+              onClick={() => handleRowClick(i.id)}
+              className="
+                bg-white border border-slate-200 rounded-xl
+                p-4 space-y-3
+                active:bg-slate-50 transition
+              "
+            >
+              <div className="flex items-start justify-between">
+                <div>
+                  <div className="text-sm font-semibold text-slate-800">
+                    #{i.id} — {i.customer_name || 'Демо-клиент'}
+                  </div>
+
+                  <div className="text-xs text-slate-500 flex items-center gap-1 mt-1">
+                    {tab === 'sales' ? <Receipt size={14} /> : <RotateCcw size={14} />}
+                    {formatDateTime(i.created_at)}
+                  </div>
+                </div>
+
+                <Eye size={18} className="text-slate-400" />
+              </div>
+
+              <div className="flex items-center justify-between text-sm">
+                <span className="inline-flex rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700">
+                  {i.created_by_name}
+                </span>
+
+                <span className="font-semibold text-slate-800">{Number(i.total_amount).toLocaleString()} с</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {!!filtered.length && (
+        <div className="hidden sm:block bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm min-w-[900px]">
               <thead className="bg-slate-50 border-b border-slate-200">
@@ -133,13 +185,7 @@ const TransactionPage = () => {
                     </td>
 
                     <td className="px-4 py-3 text-right">
-                      <button
-                        onClick={() => {
-                          setViewId(i.id)
-                          setViewType(tab)
-                        }}
-                        className="text-slate-500 hover:text-blue-600"
-                      >
+                      <button onClick={() => handleRowClick(i.id)} className="text-slate-500 hover:text-blue-600">
                         <Eye size={16} />
                       </button>
                     </td>
@@ -150,20 +196,16 @@ const TransactionPage = () => {
           </div>
         </div>
       )}
-      {tab === 'sales' ? (
+
+      {tab === 'sales' && (
         <CreateSaleModal
-          onSuccess={() => setCreateOpen(false)}
           open={createOpen}
           onClose={() => setCreateOpen(false)}
-        />
-      ) : (
-        <CreateReturnModal
           onSuccess={() => setCreateOpen(false)}
-          open={createOpen}
-          onClose={() => setCreateOpen(false)}
         />
       )}
-      {viewId && <TransactionViewModal id={viewId} type={viewType} onClose={() => setViewId(null)} />}
+
+      {viewId && <ReturnsViewModal id={viewId} onClose={() => setViewId(null)} />}
     </div>
   )
 }

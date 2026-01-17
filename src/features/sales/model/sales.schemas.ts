@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const saleDtoSchema = z.object({
   id: z.number(),
   customer_id: z.number().nullable(),
-  customer_name: z.string(),
+  customer_name: z.string().nullable(),
   total_amount: z.string(),
   created_by: z.number(),
   created_by_name: z.string(),
@@ -23,7 +23,7 @@ const saleItemSchema = z.object({
 export const saleOneDetailSchema = z.object({
   id: z.number(),
   customer_id: z.number().nullable(),
-  customer_name: z.string(),
+  customer_name: z.string().nullable(),
   total_amount: z.string(),
   created_by: z.number(),
   created_by_name: z.string(),

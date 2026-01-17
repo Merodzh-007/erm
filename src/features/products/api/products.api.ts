@@ -1,5 +1,5 @@
 import { baseApi } from '@/shared/request/baseApi'
-import type { TPostProductResponseSuccess, TProductDto } from '../model/products.types'
+import type { TPostProductCredentials, TPostProductResponseSuccess, TProductDto } from '../model/products.types'
 import { productDtoSchema } from '../model/products.schemas'
 
 export const productsApi = baseApi.injectEndpoints({
@@ -12,7 +12,7 @@ export const productsApi = baseApi.injectEndpoints({
       transformResponse: (response) => productDtoSchema.array().parseAsync(response),
       providesTags: ['Products'],
     }),
-    postProduct: build.mutation<TPostProductResponseSuccess, Omit<TProductDto, 'id' | 'created_at'>>({
+    postProduct: build.mutation<TPostProductResponseSuccess, TPostProductCredentials>({
       query: (data) => ({
         url: '/products',
         method: 'POST',

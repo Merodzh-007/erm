@@ -3,7 +3,7 @@ import z from 'zod'
 export const returnDtoSchema = z.object({
   id: z.number(),
   customer_id: z.number().nullable(),
-  customer_name: z.string(),
+  customer_name: z.string().nullable(),
   total_amount: z.string(),
   created_by: z.number(),
   created_by_name: z.string(),

@@ -1,3 +1,5 @@
+// Модалка не используется, правка
+
 import { useGetProductsQuery } from '@/features/products/api/products.api'
 import { Modal } from './Modal'
 import { useGetCustomersQuery } from '@/features/customers/api/customers.api'

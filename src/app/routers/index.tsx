@@ -3,9 +3,6 @@ import AppLayout from '@/widgets/layout/ui/AppLayout'
 import { AuthGuard } from '@/features/auth/ui/AuthGuard'
 import { paths } from './constants'
 import AuthPage from '@/pages/AuthPage'
-import StockPage from '@/pages/StockPage'
-import WarehousesPage from '@/pages/WarehousesPage'
-import ProductsPage from '@/pages/ProductPage'
 import ReceiptPage from '@/pages/ReceiptPage'
 import ReceiptDetailPage from '@/pages/ReceiptDetailPage'
 import UsersPage from '@/pages/UsersPage'
@@ -14,6 +11,8 @@ import HistoryStockDetailPage from '@/pages/HistoryStockDetailPage'
 import CustomersPage from '@/pages/CustomersPage'
 import CustomerDetailPage from '@/pages/CustomerDetailPage'
 import TransactionPage from '@/pages/TransactionPage'
+import SalesPage from '@/pages/SalesPage'
+import InventoryPage from '@/pages/InventoryPage'
 
 export const router = createBrowserRouter([
   {
@@ -29,20 +28,13 @@ export const router = createBrowserRouter([
     children: [
       {
         path: paths.home(),
-        element: <StockPage />,
+        element: <InventoryPage />,
       },
       {
         path: paths.stockHistory(),
         element: <HistoryStockPage />,
       },
-      {
-        path: paths.warehouse(),
-        element: <WarehousesPage />,
-      },
-      {
-        path: paths.products(),
-        element: <ProductsPage />,
-      },
+
       {
         path: paths.receipt(),
         element: <ReceiptPage />,
@@ -66,6 +58,10 @@ export const router = createBrowserRouter([
       {
         path: paths.transaction(),
         element: <TransactionPage />,
+      },
+      {
+        path: paths.sales(':id'),
+        element: <SalesPage />,
       },
 
       {

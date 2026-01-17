@@ -40,7 +40,6 @@ const EditStockModal = ({ stock, onClose }: { stock: TPutWarehouseStock | null; 
           animate-[fadeIn_0.2s_ease-out]
         "
       >
-        {/* Header */}
         <div className="flex items-start justify-between px-6 py-4 border-b border-slate-200">
           <div>
             <h2 className="text-lg font-semibold text-slate-800">Редактирование остатка</h2>
@@ -54,7 +53,6 @@ const EditStockModal = ({ stock, onClose }: { stock: TPutWarehouseStock | null; 
           </button>
         </div>
 
-        {/* Content */}
         <div className="px-6 py-5 space-y-5">
           <div className="grid grid-cols-2 gap-4">
             <Field label="Коробки" value={form.boxes_qty} onChange={(v) => setForm({ ...form, boxes_qty: v })} />
@@ -79,7 +77,6 @@ const EditStockModal = ({ stock, onClose }: { stock: TPutWarehouseStock | null; 
           </div>
         </div>
 
-        {/* Footer */}
         <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-200 bg-slate-50 rounded-b-2xl">
           <button
             onClick={onClose}

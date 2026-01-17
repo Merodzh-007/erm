@@ -1,27 +1,19 @@
-import { X, User, Calendar, Receipt, RotateCcw, Package } from 'lucide-react'
+import { X, User, Calendar, RotateCcw, Package } from 'lucide-react'
 import { formatDateTime } from '@/shared/formatDateTime'
 import { Loading } from '@/shared/ui/Loading'
-import { useGetOneDetailSaleQuery } from '@/features/sales/api/sales.api'
 import { useGetOneDetailReturnQuery } from '@/features/returns/api/returns.api'
 import { skipToken } from '@reduxjs/toolkit/query'
 
 type Props = {
   id: number
-  type: 'sales' | 'returns'
   onClose: () => void
 }
 
-const TransactionViewModal = ({ id, type, onClose }: Props) => {
-  const saleQuery = useGetOneDetailSaleQuery(type === 'sales' ? id : skipToken, {
-    skip: type !== 'sales',
-  })
+const ReturnsViewModal = ({ id, onClose }: Props) => {
+  const returnQuery = useGetOneDetailReturnQuery(id ?? skipToken)
 
-  const returnQuery = useGetOneDetailReturnQuery(type === 'returns' ? id : skipToken, {
-    skip: type !== 'returns',
-  })
-
-  const data = type === 'sales' ? saleQuery.data : returnQuery.data
-  const isLoading = saleQuery.isLoading || returnQuery.isLoading
+  const data = returnQuery.data
+  const isLoading = returnQuery.isLoading
 
   if (isLoading) {
     return (
@@ -38,12 +30,8 @@ const TransactionViewModal = ({ id, type, onClose }: Props) => {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h2 className="text-xl font-semibold text-slate-800 flex items-center gap-2">
-            {type === 'sales' ? (
-              <Receipt size={20} className="text-blue-600" />
-            ) : (
-              <RotateCcw size={20} className="text-orange-500" />
-            )}
-            {type === 'sales' ? 'Продажа' : 'Возврат'} #{data.id}
+            <RotateCcw size={20} className="text-orange-500" />
+            Возврат #{data.id}
           </h2>
           <p className="text-sm text-slate-500">Детали документа</p>
         </div>
@@ -98,7 +86,7 @@ const TransactionViewModal = ({ id, type, onClose }: Props) => {
   )
 }
 
-export default TransactionViewModal
+export default ReturnsViewModal
 
 const ModalLayout = ({ children, onClose }: { children: React.ReactNode; onClose: () => void }) => (
   <div className="fixed inset-0 z-50 flex items-center justify-center">

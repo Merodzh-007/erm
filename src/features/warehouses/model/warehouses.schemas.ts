@@ -4,3 +4,46 @@ export const warehouseSchema = z.object({
   id: z.number(),
   name: z.string(),
 })
+
+export const warehouseProductsSchema = z.object({
+  warehouse: warehouseSchema,
+  products: z.array(
+    z.object({
+      id: z.number(),
+      product_id: z.number(),
+      product_name: z.string(),
+      manufacturer: z.string().nullable(),
+      boxes_qty: z.number(),
+      pieces_qty: z.number(),
+      weight_kg: z.string(),
+      volume_cbm: z.string(),
+      updated_at: z.string(),
+    })
+  ),
+})
+
+export const warehouseProductsDetailSchema = z.object({
+  warehouse: warehouseSchema,
+  product: z.object({
+    id: z.number(),
+    image: z
+      .string()
+      .nullable()
+      .transform(
+        (val) =>
+          val ??
+          'https://avatars.mds.yandex.net/i?id=65925811af36ef930db4a09c96b0cbf1d2b0763c-5221533-images-thumbs&n=13'
+      ),
+    name: z.string(),
+    manufacturer: z.string().nullable(),
+    created_at: z.string(),
+  }),
+  stock: z.object({
+    id: z.number(),
+    boxes_qty: z.number(),
+    pieces_qty: z.number(),
+    weight_kg: z.string(),
+    volume_cbm: z.string(),
+    updated_at: z.string(),
+  }),
+})

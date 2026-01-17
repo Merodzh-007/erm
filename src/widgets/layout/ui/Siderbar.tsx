@@ -1,5 +1,5 @@
 import { NavLink, useNavigate } from 'react-router'
-import { LogOut, Package, History, ShoppingCart, Warehouse, X, ClipboardList, Users, Boxes } from 'lucide-react'
+import { LogOut, Package, History, ShoppingCart, Warehouse, X, Users } from 'lucide-react'
 import { useAuth } from '@/features/auth/hooks/auth.hooks'
 import { paths } from '@/app/routers/constants'
 import { useLogoutMutation } from '@/features/auth/api/auth.api'
@@ -14,8 +14,8 @@ type Props = {
 const navigation = [
   {
     to: paths.home(),
-    label: 'остатки товара',
-    icon: Boxes,
+    label: 'Склады',
+    icon: Warehouse,
   },
   {
     to: paths.receipt(),
@@ -27,16 +27,7 @@ const navigation = [
     label: 'транзакция',
     icon: ShoppingCart,
   },
-  {
-    to: paths.warehouse(),
-    label: 'Склады',
-    icon: Warehouse,
-  },
-  {
-    to: paths.products(),
-    label: 'Товары',
-    icon: ClipboardList,
-  },
+
   {
     to: paths.stockHistory(),
     label: 'История изменений',

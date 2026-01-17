@@ -1,3 +1,4 @@
+// правка
 import { useMemo, useState } from 'react'
 import { Plus, Warehouse, Trash2, Search } from 'lucide-react'
 import {
@@ -14,7 +15,6 @@ const WarehousesPage = () => {
   const [createWarehouse, { isLoading: isCreating }] = usePostWarehouseMutation()
   const [deleteWarehouse, { isLoading: isDeleting }] = useDeleteWarehouseMutation()
   const { isAdmin } = useAuth()
-
   const [name, setName] = useState('')
   const [search, setSearch] = useState('')
   const [deleteId, setDeleteId] = useState<number | null>(null)
@@ -60,7 +60,6 @@ const WarehousesPage = () => {
         </div>
       </div>
 
-      {/* Create */}
       {isAdmin && (
         <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
           <h2 className="text-sm font-medium text-slate-700 mb-4">Добавить склад</h2>

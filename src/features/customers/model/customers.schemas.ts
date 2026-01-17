@@ -16,13 +16,6 @@ const transactionsSchema = z.object({
   type: z.enum(['sale', 'return']),
 })
 
-export const oneCustomerDtoSchema = z.object({
-  id: z.number(),
-  full_name: z.string(),
-  phone: z.string(),
-  city: z.string(),
-  balance: z.string(),
-  created_at: z.string(),
-  updated_at: z.string(),
+export const oneCustomerDtoSchema = customerDtoSchema.extend({
   transactions: z.array(transactionsSchema),
 })

@@ -13,3 +13,4 @@ export type TReturnCreateCredentials = {
     unit_price: string
   }[]
 }
+export type TReturnItem = TReturnCreateCredentials['items'][0]

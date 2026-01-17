@@ -8,7 +8,7 @@ const HistoryStockPage = () => {
   const { data, isLoading } = useGetHistoryStockQuery()
   const navigate = useNavigate()
   if (isLoading) {
-    return <Loading text="Истории изменений" />
+    return <Loading text="истории изменений" />
   }
 
   if (!data?.length) {

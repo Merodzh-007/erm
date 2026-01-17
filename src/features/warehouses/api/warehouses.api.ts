@@ -1,6 +1,14 @@
 import { baseApi } from '@/shared/request/baseApi'
-import type { TMutateWarehouse, TPostWarehouseSuccess, TWarehouse } from '../model/warehouses.types'
-import { warehouseSchema } from '../model/warehouses.schemas'
+import type {
+  TGetWarehousesProductDetail,
+  TGetWarehousesProducts,
+  TGetWarehousesProductsCredentials,
+  TMutateWarehouse,
+  TPostWarehouseSuccess,
+  TWarehouse,
+} from '../model/warehouses.types'
+import { warehouseProductsDetailSchema, warehouseProductsSchema, warehouseSchema } from '../model/warehouses.schemas'
+import type { TDefaultResponse, TId } from '@/shared/types'
 
 const warehousesApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -20,13 +28,33 @@ const warehousesApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Warehouses'],
     }),
-    deleteWarehouse: build.mutation<{ message: string }, number>({
+    deleteWarehouse: build.mutation<TDefaultResponse, number>({
       query: (id) => ({
         url: `/warehouses/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Warehouses'],
     }),
+    getWarehouseProducts: build.query<TGetWarehousesProducts, TId>({
+      query: (id) => ({
+        url: `/warehouses/${id}/products`,
+        method: 'GET',
+      }),
+      transformResponse: (response: unknown) => warehouseProductsSchema.parseAsync(response),
+    }),
+    getWarehouseProductsDetail: build.query<TGetWarehousesProductDetail, TGetWarehousesProductsCredentials>({
+      query: (data) => ({
+        url: `/warehouses/${data.warehouseId}/products/${data.productId}`,
+        method: 'GET',
+      }),
+      transformResponse: (response: unknown) => warehouseProductsDetailSchema.parseAsync(response),
+    }),
   }),
 })
-export const { useGetWarehousesQuery, usePostWarehouseMutation, useDeleteWarehouseMutation } = warehousesApi
+export const {
+  useGetWarehousesQuery,
+  usePostWarehouseMutation,
+  useDeleteWarehouseMutation,
+  useGetWarehouseProductsDetailQuery,
+  useGetWarehouseProductsQuery,
+} = warehousesApi
