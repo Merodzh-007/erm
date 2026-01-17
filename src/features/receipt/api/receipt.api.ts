@@ -26,11 +26,7 @@ const receiptApi = baseApi.injectEndpoints({
         url: `/inventory/receipt/${id}`,
         method: 'GET',
       }),
-      transformResponse: (response) => {
-        console.log('response', response)
-
-        return oneReceiptGtoSchema.parseAsync(response)
-      },
+      transformResponse: (response) => oneReceiptGtoSchema.parseAsync(response),
     }),
   }),
 })

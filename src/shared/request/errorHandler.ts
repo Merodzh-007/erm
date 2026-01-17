@@ -42,7 +42,6 @@ export const errorHandler = (error: any) => {
 
   if (response && response?.status) {
     const message = response?.data && response.data.error
-    console.log(' response.data.message', response?.data?.error)
 
     const errorText = message || (codeMessages as any)[response.status]
 

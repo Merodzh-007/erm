@@ -16,12 +16,9 @@ export const useAuth = () => {
 
 export const useAuthInit = () => {
   const token = Cookie.get('token')
-  console.log('useAuthInit 1');
-  
+
   useGetMeQuery(undefined, {
     skip: !token,
     refetchOnMountOrArgChange: false,
   })
-  console.log('useAuthInit 2');
-
 }
