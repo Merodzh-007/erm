@@ -1,6 +1,7 @@
 import { baseApi } from '@/shared/request/baseApi'
 import type { TEditStockDto, THistoryStock, TPostMoveCredentials, TWarehouseStock } from '../model/stock.types'
 import { historyStockSchema, warehouseStockSchema } from '../model/stock.schemas'
+import type { TDefaultResponse } from '@/shared/types'
 
 const stockApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -12,7 +13,7 @@ const stockApi = baseApi.injectEndpoints({
       providesTags: ['WarehouseStock'],
       transformErrorResponse: (response) => warehouseStockSchema.array().parseAsync(response),
     }),
-    putWarehouseStock: build.mutation<{ id: number; message: string }, { id: number; body: TEditStockDto }>({
+    putWarehouseStock: build.mutation<TDefaultResponse, { id: number; body: TEditStockDto }>({
       query: ({ id, body }) => ({
         url: `/warehouse/stock/${id}`,
         method: 'PUT',
@@ -26,7 +27,7 @@ const stockApi = baseApi.injectEndpoints({
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['WarehouseStock'],
+      invalidatesTags: ['WarehouseStock', 'ProductDetails'],
     }),
     getHistoryStock: build.query<THistoryStock[], void>({
       query: () => ({

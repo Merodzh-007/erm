@@ -69,7 +69,7 @@ const CustomerDetailPage = () => {
                         <TransactionType type={t.type} />
                       </td>
 
-                      <td className="px-6 py-3 font-medium">{Number(t.amount).toLocaleString()} ₽</td>
+                      <td className="px-6 py-3 font-medium">{Number(t.amount).toLocaleString()} c</td>
 
                       <td className="px-6 py-3 text-slate-600">{new Date(t.date).toLocaleString()}</td>
                     </tr>
@@ -83,7 +83,7 @@ const CustomerDetailPage = () => {
                 <div key={t.id} className="p-4 space-y-2">
                   <div className="flex items-center justify-between">
                     <TransactionType type={t.type} />
-                    <div className="font-semibold">{Number(t.amount).toLocaleString()} ₽</div>
+                    <div className="font-semibold">{Number(t.amount).toLocaleString()} c</div>
                   </div>
 
                   <div className="text-xs text-slate-500">{new Date(t.date).toLocaleString()}</div>

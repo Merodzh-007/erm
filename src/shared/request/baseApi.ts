@@ -45,6 +45,16 @@ export const baseApi = createApi({
   baseQuery: baseQueryWithAuth,
   refetchOnFocus: false,
   refetchOnReconnect: false,
-  tagTypes: ['Warehouses', 'WarehouseStock', 'Products', 'Customers', 'Receipts', 'Sales', 'HistoryStock', 'Returns'],
+  tagTypes: [
+    'Warehouses',
+    'WarehouseStock',
+    'Products',
+    'Customers',
+    'Receipts',
+    'Sales',
+    'HistoryStock',
+    'Returns',
+    'ProductDetails',
+  ],
   endpoints: () => ({}),
 })

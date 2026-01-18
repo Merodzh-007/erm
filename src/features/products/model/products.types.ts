@@ -1,5 +1,6 @@
 import type z from 'zod'
 import { productDtoSchema } from './products.schemas'
+import type { TId } from '@/shared/types'
 
 export type TProductDto = z.infer<typeof productDtoSchema>
 export type TSaleItemForm = {
@@ -9,10 +10,15 @@ export type TSaleItemForm = {
   purchase_cost: string
   selling_price: string
 }
-export type TPostProductCredentials = Omit<
-  TProductDto,
-  'id' | 'created_at' | 'last_unit_price' | 'total_stock' | 'purchase_cost' | 'selling_price'
->
+export type TPostProductCredentials = {
+  name: string
+  manufacturer: string | null
+  image: File | null
+}
+export type TPutProductCredentials = {
+  id: TId
+  body: FormData
+}
 export type TPostProductResponseSuccess = {
   id: number
   name: string

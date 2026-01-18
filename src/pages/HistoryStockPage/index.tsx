@@ -1,9 +1,22 @@
+import { useNavigate } from 'react-router'
+import { Eye } from 'lucide-react'
+
 import { paths } from '@/app/routers/constants'
 import { useGetHistoryStockQuery } from '@/features/remain/api/stock.api'
 import { Loading } from '@/shared/ui/Loading'
-import { Eye } from 'lucide-react'
-import { useNavigate } from 'react-router'
+import { Td, Th } from '@/shared/ui/Table'
+import type { TStockChangeType } from '@/features/remain/model/stock.types'
 
+const CHANGE_TYPE_LABEL: Record<TStockChangeType, string> = {
+  IN: 'Приход',
+  OUT: 'Расход',
+  ADJUSTMENT: 'Корректировка',
+}
+const CHANGE_TYPE_STYLE: Record<TStockChangeType, string> = {
+  IN: 'bg-green-100 text-green-700',
+  OUT: 'bg-red-100 text-red-700',
+  ADJUSTMENT: 'bg-yellow-100 text-yellow-800',
+}
 const HistoryStockPage = () => {
   const { data, isLoading } = useGetHistoryStockQuery()
   const navigate = useNavigate()
@@ -26,60 +39,58 @@ const HistoryStockPage = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-slate-50 border-b border-slate-200">
-              <tr className="text-left text-slate-600">
-                <th className="px-4 py-3 font-medium">Дата</th>
-                <th className="px-4 py-3 font-medium">Товар</th>
-                <th className="px-4 py-3 font-medium">Склад</th>
-                <th className="px-4 py-3 font-medium">Изменения</th>
-                <th className="px-4 py-3 font-medium">Пользователь</th>
-                <th className="px-4 py-3 font-medium">Причина</th>
-                <th className="px-4 py-3 font-medium text-right">Действие</th>
+              <tr>
+                <Th>Дата</Th>
+                <Th>Товар</Th>
+                <Th>Склад</Th>
+                <Th>Изменения</Th>
+                <Th>Пользователь</Th>
+                <Th>Тип</Th>
+                <Th>Причина</Th>
+                <Th right>Действие</Th>
               </tr>
             </thead>
 
-            <tbody>
+            <tbody className="divide-y divide-slate-100">
               {data.map((h) => (
-                <tr key={h.id} className="border-b last:border-b-0 hover:bg-slate-50 transition">
-                  <td className="px-4 py-3 text-slate-600">{new Date(h.created_at).toLocaleString('ru-RU')}</td>
+                <tr key={h.id} className="hover:bg-slate-50 transition">
+                  <Td className="text-slate-600">{new Date(h.created_at).toLocaleString('ru-RU')}</Td>
 
-                  <td className="px-4 py-3">
+                  <Td>
                     <div className="font-medium text-slate-800">{h.product_name}</div>
                     <div className="text-xs text-slate-500">{h.manufacturer}</div>
-                  </td>
+                  </Td>
 
-                  <td className="px-4 py-3 text-slate-700">{h.warehouse_name}</td>
+                  <Td>{h.warehouse_name}</Td>
 
-                  <td className="px-4 py-3 text-slate-700 space-y-0.5">
-                    <Change label="Коробки" from={h.old_boxes_qty} to={h.new_boxes_qty} />
-                    <Change label="Штуки" from={h.old_pieces_qty} to={h.new_pieces_qty} />
-                    <Change label="Вес" from={h.old_weight_kg} to={h.new_weight_kg} />
-                    <Change label="Объём" from={h.old_volume_cbm} to={h.new_volume_cbm} />
-                  </td>
+                  <Td className="space-y-0.5">
+                    <Change label="Всего шт" from={h.old_total_pieces} to={h.new_total_pieces} />
+                    <Change label="Вес (кг)" from={h.old_weight_kg} to={h.new_weight_kg} />
+                    <Change label="Объём (м³)" from={h.old_volume_cbm} to={h.new_volume_cbm} />
+                  </Td>
 
-                  <td className="px-4 py-3">
+                  <Td>
                     <span className="inline-flex rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700">
                       {h.user_name}
                     </span>
-                  </td>
+                  </Td>
 
-                  <td className="px-4 py-3">
-                    <span
-                      className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-                        h.reason === 'Ошибка' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
-                      }`}
-                    >
-                      {h.reason}
-                    </span>
-                  </td>
+                  <Td>
+                    <ChangeTypeBadge type={h.change_type} />
+                  </Td>
 
-                  <td className="px-4 py-3 text-right">
+                  <Td>
+                    <ReasonBadge reason={h.reason} />
+                  </Td>
+
+                  <Td right>
                     <button
                       onClick={() => navigate(paths.stockHistoryDetails(h.id.toString()))}
-                      className="text-slate-400 hover:text-blue-600 transition cursor-pointer"
+                      className="text-slate-400 hover:text-blue-600 transition"
                     >
                       <Eye size={16} />
                     </button>
-                  </td>
+                  </Td>
                 </tr>
               ))}
             </tbody>
@@ -105,15 +116,14 @@ const HistoryStockPage = () => {
               </button>
             </div>
 
-            <div className="text-sm text-slate-700">
+            <div className="text-sm">
               <span className="text-slate-500">Склад:</span> {h.warehouse_name}
             </div>
 
             <div className="space-y-1">
-              <Change label="Коробки" from={h.old_boxes_qty} to={h.new_boxes_qty} />
-              <Change label="Штуки" from={h.old_pieces_qty} to={h.new_pieces_qty} />
-              <Change label="Вес" from={h.old_weight_kg} to={h.new_weight_kg} />
-              <Change label="Объём" from={h.old_volume_cbm} to={h.new_volume_cbm} />
+              <Change label="Всего шт" from={h.old_total_pieces} to={h.new_total_pieces} />
+              <Change label="Вес (кг)" from={h.old_weight_kg} to={h.new_weight_kg} />
+              <Change label="Объём (м³)" from={h.old_volume_cbm} to={h.new_volume_cbm} />
             </div>
 
             <div className="flex justify-between items-center pt-2 border-t">
@@ -121,20 +131,18 @@ const HistoryStockPage = () => {
                 {h.user_name}
               </span>
 
-              <span
-                className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-                  h.reason === 'Ошибка' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
-                }`}
-              >
-                {h.reason}
-              </span>
+              <ChangeTypeBadge type={h.change_type} />
             </div>
+
+            <ReasonBadge reason={h.reason} />
           </div>
         ))}
       </div>
     </>
   )
 }
+
+export default HistoryStockPage
 
 const Change = ({ label, from, to }: { label: string; from: number; to: number }) => {
   if (from === to) return null
@@ -148,4 +156,13 @@ const Change = ({ label, from, to }: { label: string; from: number; to: number }
   )
 }
 
-export default HistoryStockPage
+const ChangeTypeBadge = ({ type }: { type: TStockChangeType }) => {
+  return (
+    <span className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${CHANGE_TYPE_STYLE[type]}`}>
+      {CHANGE_TYPE_LABEL[type]}
+    </span>
+  )
+}
+const ReasonBadge = ({ reason }: { reason: string }) => (
+  <span className="inline-flex rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700">{reason}</span>
+)

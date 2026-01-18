@@ -12,6 +12,9 @@ const AdminReceiptModal = ({ open, onClose }: { open: boolean; onClose: () => vo
         flex items-center justify-center
         bg-black/40 backdrop-blur-sm
       "
+      style={{
+        overflow: 'auto',
+      }}
       onClick={onClose}
     >
       <div

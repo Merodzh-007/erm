@@ -13,10 +13,16 @@ export const warehouseProductsSchema = z.object({
       product_id: z.number(),
       product_name: z.string(),
       manufacturer: z.string().nullable(),
-      boxes_qty: z.number(),
-      pieces_qty: z.number(),
-      weight_kg: z.string(),
-      volume_cbm: z.string(),
+
+      total_pieces: z.coerce.number(),
+
+      weight_kg: z.coerce.number(),
+      volume_cbm: z.coerce.number(),
+
+      purchase_cost: z.coerce.number(),
+      selling_price: z.coerce.number(),
+
+      image: z.string(),
       updated_at: z.string(),
     })
   ),
@@ -24,6 +30,7 @@ export const warehouseProductsSchema = z.object({
 
 export const warehouseProductsDetailSchema = z.object({
   warehouse: warehouseSchema,
+
   product: z.object({
     id: z.number(),
     image: z
@@ -38,12 +45,15 @@ export const warehouseProductsDetailSchema = z.object({
     manufacturer: z.string().nullable(),
     created_at: z.string(),
   }),
+
   stock: z.object({
     id: z.number(),
-    boxes_qty: z.number(),
-    pieces_qty: z.number(),
+
+    total_pieces: z.number(),
+
     weight_kg: z.string(),
     volume_cbm: z.string(),
+
     updated_at: z.string(),
   }),
 })

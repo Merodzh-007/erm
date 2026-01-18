@@ -20,6 +20,9 @@ const CreateWarehouseModal = ({ onClose }: { onClose: () => void }) => {
         flex items-center justify-center
         bg-black/40 backdrop-blur-sm
       "
+      style={{
+        overflow: 'auto',
+      }}
       onClick={onClose}
     >
       <div

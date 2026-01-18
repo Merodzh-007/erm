@@ -9,6 +9,9 @@ export const productDtoSchema = z.object({
   total_stock: z.string(),
   purchase_cost: z.string(),
   selling_price: z.string(),
+  boxes_qty: z.number().nullish(),
+  pieces_qty: z.number().nullish(),
+  total_pieces: z.number().optional(),
   image: z
     .string()
     .nullable()

@@ -17,7 +17,7 @@ export const returnOneDetailSchema = returnDtoSchema.extend({
       id: z.number(),
       product_id: z.number(),
       product_name: z.string(),
-      manufacturer: z.string(),
+      manufacturer: z.string().nullable(),
       quantity: z.number(),
       unit_price: z.string(),
       total_price: z.string(),
